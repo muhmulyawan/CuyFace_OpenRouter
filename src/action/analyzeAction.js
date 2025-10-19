@@ -1,3 +1,4 @@
+"use server"
 export async function anylyzeAction(prevState, formData) {
     const imageDataUrl = String(formData.get("image") || "");
     const rid = String(formData.get("rid") || "");
@@ -23,7 +24,8 @@ export async function anylyzeAction(prevState, formData) {
 
     const instruction = `
         Keluarkan HASIL dalam HTML valid (tanpa <style> eksternal). Topik: analisis wajah/pose (hiburan).
-        Nada tegas & ringkas. Jangan minta data lahir. Hindari hal sensitif & klaim medis/keuangan.
+        Nada tegas & ringkas. Jangan minta data lahir. Hindari hal sensitif & klaim medis/keuangan dengan konteks hiburan dan sara.
+        lalu 
         Jika TIDAK ada manusia: balas persis:
         <p> Tidak terdeteksi orang. Tolong Anda berada dalam kamera dan ambil foto lagi. </p>
         Jika ADA manusia, isi SEMUA bagian di bawah secara singkat:
@@ -33,6 +35,8 @@ export async function anylyzeAction(prevState, formData) {
             <li>Emosi dominan (mis. senyum tipis/ceria/tenang/fokus)</li>
             <li>Arah pandang & gestur (menghadap kamera/menoleh; bahu rileks/tegang)</li>
             <li>Nuansa umum (rapi/kasual/enerjik)</li>
+            <li>Karakter fisik (belum mandi/berisi/tidak pernah tidur)</li>
+            <li>Kepribadian (INTJ, ENTJ, INTP, dan lainnya) dengan penjelasannya</li>
         </ul>
         </section>
         <section>
@@ -105,7 +109,7 @@ export async function anylyzeAction(prevState, formData) {
 
     if(!res.ok) {
         const t = res.text()
-        console.errror("ERROR: ", res.status, t)
+        console.error("ERROR: ", res.status, t)
         return {
             ok: false,
             html: 
